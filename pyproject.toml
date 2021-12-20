@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "demo"
+version = "0.1.0"
+description = ""
+authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
+build = "build.py"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+black = "^21.11b1"
+Cython = "^0.29.25"
+
+[tool.poetry.scripts]
+demo = "demo.__main__:main"
+
+[tool.black]
+line-length = 120
+
+[build-system]
+requires = ["poetry_core>=1.0.0", "cython"]
+build-backend = "poetry.core.masonry.api"

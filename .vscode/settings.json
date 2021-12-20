@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--line-length", "120"],
+  "python.analysis.typeCheckingMode": "strict",
+  "C_Cpp.default.cStandard": "c17",
+  "C_Cpp.default.cppStandard": "c++20",
+  "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, AllowShortBlocksOnASingleLine: false, AlignConsecutiveMacros: true, AllowShortLoopsOnASingleLine: false, AllowShortFunctionsOnASingleLine: false, AllowShortLambdasOnASingleLine: false}"
+}
