@@ -114,6 +114,6 @@ dmypy.json
 .DS_Store
 
 # build files
-target/core
+target/vm
 target/*.o
-lib/core.cpp
+lib/vm.cpp

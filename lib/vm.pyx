@@ -1,4 +1,4 @@
-from libcore cimport test_cpp_connect
+from libvm cimport test_cpp_connect
 
 cdef _test_cython_connect(int n):
     test_cpp_connect(n)

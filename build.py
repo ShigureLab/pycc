@@ -7,8 +7,8 @@ from setuptools.extension import Extension
 
 ext_modules = [
     Extension(
-        "demo.core",
-        sources=["lib/core.pyx", "lib/libcore.cpp"],
+        "pycc.vm",
+        sources=["lib/vm.pyx", "lib/libvm.cpp"],
         language="c++",
     ),
 ]

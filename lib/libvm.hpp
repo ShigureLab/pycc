@@ -1,4 +1,4 @@
 #pragma once
-namespace core {
+namespace vm {
 bool test_cpp_connect(int k);
 }

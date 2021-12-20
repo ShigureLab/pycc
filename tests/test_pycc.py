@@ -1,4 +1,4 @@
-from demo import __version__
+from pycc import __version__
 
 
 def test_version():

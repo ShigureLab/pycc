@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "demo"
+name = "pycc"
 version = "0.1.0"
 description = ""
 authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
@@ -14,7 +14,7 @@ black = "^21.11b1"
 Cython = "^0.29.25"
 
 [tool.poetry.scripts]
-demo = "demo.__main__:main"
+pycc = "pycc.__main__:main"
 
 [tool.black]
 line-length = 120

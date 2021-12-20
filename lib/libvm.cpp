@@ -1,10 +1,10 @@
-#include "libcore.hpp"
+#include "libvm.hpp"
 
 #include <iostream>
 
-namespace core {
+namespace vm {
 bool test_cpp_connect(int k) {
   std::cout << "test_cpp_connect in c++ code." << std::endl;
   return true;
 }
-}  // namespace core
+}  // namespace vm
