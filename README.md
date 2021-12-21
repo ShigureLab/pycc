@@ -1,4 +1,4 @@
-# C++ with poetry<sup>template</sup>
+# pycc
 
 ## Python Side
 
