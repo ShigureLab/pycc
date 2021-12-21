@@ -1,4 +1,6 @@
-# pycc
+# pycc [WIP]
+
+A simple C language compiler implemented by Python.
 
 ## Python Side
 
@@ -20,7 +22,7 @@ poetry install # 将 C++ 编译结果安装到 Python 代码对应位置
 ### Run
 
 ```bash
-poetry run demo
+poetry run pycc
 ```
 
 ## C++ Side
