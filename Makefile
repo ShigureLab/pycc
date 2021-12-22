@@ -5,7 +5,7 @@ VM_O = $(TARGET_DIR)/libvm.o
 TEST_VM_SRC = cpp/test/test_libvm.cpp
 TEST_VM_O = $(TARGET_DIR)/test_libvm.o
 EXECUTABLE = $(TARGET_DIR)/vm
-LDFLAGS_COMMON = -std=c++20
+LDFLAGS_COMMON = -std=c++17
 
 all:
 	$(CXX) -c $(VM_SRC) $(LDFLAGS_COMMON) -o $(VM_O)

@@ -38,13 +38,13 @@ class BuildExt(build_ext):
         super().build_extensions()
 
 
-Cpp20BuildExt = partial(BuildExt, std="c++20")
+Cpp17BuildExt = partial(BuildExt, std="c++17")
 
 
 def build(setup_kwargs: dict[str, Any]):
     setup_kwargs.update(
         {
             "ext_modules": cythonize(ext_modules),
-            "cmdclass": {"build_ext": Cpp20BuildExt},
+            "cmdclass": {"build_ext": Cpp17BuildExt},
         }
     )
