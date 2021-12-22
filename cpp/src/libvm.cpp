@@ -40,10 +40,6 @@ const std::string instruction_name[] = {
     "CLOS", "PRTF", "MALC", "FREE", "MSET", "MCMP", "EXIT",
 };
 
-bool test_cpp_connect(int k) {
-  std::cout << "test_cpp_connect in c++ code." << std::endl;
-  return true;
-}
 VirtualMachineCpp::VirtualMachineCpp() {
 }
 

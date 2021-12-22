@@ -1,5 +1,5 @@
 import pytest
-from pycc.vm import VirtualMachine, Instruction, c_pointer_to_string
+from pycc.vm import VirtualMachine, Instruction, c_pointer_to_string, c_pointer_to_integer
 
 
 poolsize = 256 * 1024
@@ -108,3 +108,29 @@ def test_reset_add(a: int, b: int, c: int, d: int):
 
     result = vm.run(True)
     assert result == c + d
+
+
+def test_registers():
+    global poolsize
+    a, b = 1, 2
+    vm = VirtualMachine(poolsize)
+    assert c_pointer_to_integer(vm.pc) == 0
+    assert c_pointer_to_integer(vm.bp) == 0
+    assert c_pointer_to_integer(vm.sp) == 0
+
+    vm.add_op(Instruction.IMM)
+    vm.add_op(a)
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.IMM)
+    vm.add_op(b)
+    vm.add_op(Instruction.ADD)
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.EXIT)
+
+    result = vm.run(True)
+
+    vm.reset()
+    assert c_pointer_to_integer(vm.pc) == 0
+    assert c_pointer_to_integer(vm.bp) == 0
+    assert c_pointer_to_integer(vm.sp) == 0
+    assert result == a + b

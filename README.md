@@ -46,3 +46,15 @@ make # 编译构建 C++ 部分
 ```bash
 make run # 运行 C++ 部分测试代码
 ```
+
+## TODO List
+
+-  [ ] VM
+   -  [x] Python side 更多可访问的属性
+   -  [x] 初始化相关测试
+   -  [ ] 单步调试
+-  [ ] Lexer
+-  [ ] 语法分析
+-  [ ] docs
+   -  [ ] 文件结构说明
+-  [ ] CI

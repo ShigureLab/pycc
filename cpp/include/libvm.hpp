@@ -26,8 +26,6 @@ enum {
 };
 // clang-format on
 
-bool test_cpp_connect(int k);
-
 class VirtualMachineCpp {
  private:
   int op_counter_;

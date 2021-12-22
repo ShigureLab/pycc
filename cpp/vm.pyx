@@ -1,5 +1,6 @@
 from libc.stdlib cimport malloc
 from libc.string cimport strcpy
+from cython.operator cimport dereference
 
 cimport libvm
 from libvm cimport VirtualMachineCpp
@@ -78,6 +79,30 @@ cdef class VirtualMachine:
             opcode = <int64>c_str
         self.vmcpp.add_op(opcode)
 
+    @property
+    def poolsize(self) -> int:
+        return self.vmcpp.poolsize
+
+    @property
+    def pc(self) -> int:
+        return <int64>self.vmcpp.pc
+
+    @property
+    def bp(self) -> int:
+        return <int64>self.vmcpp.bp
+
+    @property
+    def sp(self) -> int:
+        return <int64>self.vmcpp.sp
+
+    @property
+    def ax(self) -> int:
+        return <int64>self.vmcpp.ax
+
+    @property
+    def cycle(self) -> int:
+        return <int64>self.vmcpp.cycle
+
 cdef bytes _c_pointer_to_string(int64 s_ptr):
     cdef bytes b_str = <char *>s_ptr
     return b_str
@@ -85,3 +110,9 @@ cdef bytes _c_pointer_to_string(int64 s_ptr):
 def c_pointer_to_string(s_ptr: int) -> str:
     b_str = _c_pointer_to_string(s_ptr)
     return b_str.decode()
+
+cdef int _c_pointer_to_interger(int64 i_ptr):
+    return dereference(<int *>i_ptr)
+
+def c_pointer_to_integer(i_ptr: int) -> int:
+    return _c_pointer_to_interger(i_ptr)
