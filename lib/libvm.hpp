@@ -10,6 +10,12 @@ using uint64 = unsigned long long int;
 using Register = int64;
 using AddressRegister = int64 *;
 
+extern AddressRegister pc;  // PC, 程序计数器
+extern AddressRegister bp;  // BP, 基址指针
+extern AddressRegister sp;  // SP, 堆栈指针
+extern Register ax;         // 通用寄存器
+extern Register cycle;
+
 extern int64 *text,  // 代码段
     *old_text,       // for dump text segment
     *stack;          // 栈区

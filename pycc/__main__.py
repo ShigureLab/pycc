@@ -1,6 +1,6 @@
 import argparse
 
-from pycc.vm import VirtualMachine, test_cython_connect
+from pycc.vm import VirtualMachine, test_cython_connect, Instruction, c_pointer_to_string
 
 
 def test_python_code():
@@ -9,7 +9,26 @@ def test_python_code():
 
 
 def test_vm():
-    vm = VirtualMachine(256 * 1024)
+    poolsize = 256 * 1024
+    vm = VirtualMachine(poolsize)
+
+    vm.reset()
+    vm.add_op(Instruction.IMM)
+    vm.add_op(1)
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.IMM)
+    vm.add_op(2)
+    vm.add_op(Instruction.ADD)
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.EXIT)
+    print(vm.run(True))
+
+    vm.reset()
+    vm.add_op(Instruction.IMM)
+    vm.add_op("345")
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.EXIT)
+    print(c_pointer_to_string(vm.run(True)))
 
 
 def main():

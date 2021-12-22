@@ -43,6 +43,22 @@ void test_multiply(int a, int b) {
             << " success!" << std::endl;
 }
 
+void test_string(char *s) {
+  vm::reset_vm(poolsize);
+  int i = 0;
+
+  char *result;
+  vm::text[i++] = vm::IMM;
+  vm::text[i++] = (vm::int64)s;
+  vm::text[i++] = vm::PUSH;
+  vm::text[i++] = vm::EXIT;
+  result = (char *)vm::run_vm(true);
+
+  assert(std::string(result) == s);
+  std::cout << "[SCUESS] test s(" << s << ") = " << result << " success!"
+            << std::endl;
+}
+
 int main() {
   vm::test_cpp_connect(1);
   if (vm::init_vm(poolsize) != vm::Status::OK) {
@@ -55,6 +71,9 @@ int main() {
 
   test_multiply(1, -1);
   test_multiply(0, 100);
+
+  test_string((char *)"123");
+  test_string((char *)"456");
 
   vm::free_vm();
   return 0;

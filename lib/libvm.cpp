@@ -57,6 +57,7 @@ bool test_cpp_connect(int k) {
 }
 
 Status init_vm(int poolsize) {
+  // TODO: 确保单例
   // 分配
   if (!(text = old_text = (int64 *)std::malloc(poolsize))) {
     std::cerr << "[ERROR] Could not malloc for text area" << std::endl;

@@ -9,7 +9,7 @@ A simple C language compiler implemented by Python.
 ### Install build tools
 
 ```bash
-poetry install # 首先确保 Cython 安装，如果是 Windows 需要额外自行安装 VS Build Tools
+poetry install # 首先确保 Cython 安装，如果是 Windows 需要自行额外安装 VS Build Tools
 ```
 
 ### Build
