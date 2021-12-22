@@ -1,4 +1,4 @@
-#include "libvm.hpp"
+#include "../include/libvm.hpp"
 
 #include <fcntl.h>
 #include <sys/stat.h>

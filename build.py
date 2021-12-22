@@ -8,7 +8,7 @@ from setuptools.extension import Extension
 ext_modules = [
     Extension(
         "pycc.vm",
-        sources=["lib/vm.pyx", "lib/libvm.cpp"],
+        sources=["cpp/vm.pyx", "cpp/src/libvm.cpp"],
         language="c++",
     ),
 ]

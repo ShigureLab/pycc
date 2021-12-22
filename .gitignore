@@ -119,4 +119,4 @@ setup.py
 # build files
 target/vm
 target/*.o
-lib/vm.cpp
+cpp/vm.cpp

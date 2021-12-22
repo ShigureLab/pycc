@@ -1,5 +1,5 @@
+#include "../include/libvm.hpp"
 #include "assert.h"
-#include "libvm.hpp"
 
 int constexpr poolsize = 256 * 1024;
 

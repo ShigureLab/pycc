@@ -1,16 +1,16 @@
 CXX = clang++
 TARGET_DIR = "target"
-VM_SRC = lib/libvm.cpp
+VM_SRC = cpp/src/libvm.cpp
 VM_O = $(TARGET_DIR)/libvm.o
-MAIN_TEST_SRC = lib/test_libvm.cpp
-MAIN_TEST_O = $(TARGET_DIR)/test_libvm.o
+TEST_VM_SRC = cpp/test/test_libvm.cpp
+TEST_VM_O = $(TARGET_DIR)/test_libvm.o
 EXECUTABLE = $(TARGET_DIR)/vm
 LDFLAGS_COMMON = -std=c++20
 
 all:
 	$(CXX) -c $(VM_SRC) $(LDFLAGS_COMMON) -o $(VM_O)
-	$(CXX) -c $(MAIN_TEST_SRC) $(LDFLAGS_COMMON) -o $(MAIN_TEST_O)
-	$(CXX) $(VM_O) $(MAIN_TEST_O) $(LDFLAGS_COMMON) -o $(EXECUTABLE)
+	$(CXX) -c $(TEST_VM_SRC) $(LDFLAGS_COMMON) -o $(TEST_VM_O)
+	$(CXX) $(VM_O) $(TEST_VM_O) $(LDFLAGS_COMMON) -o $(EXECUTABLE)
 
 run:
 	./$(EXECUTABLE)

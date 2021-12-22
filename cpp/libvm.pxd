@@ -1,6 +1,6 @@
 from libcpp cimport bool
 
-cdef extern from "libvm.hpp" namespace "vm":
+cdef extern from "include/libvm.hpp" namespace "vm":
     ctypedef long long int64
     ctypedef int64 Register
     ctypedef int64* AddressRegister
