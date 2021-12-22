@@ -30,6 +30,17 @@ def test_vm():
     vm.add_op(Instruction.EXIT)
     print(c_pointer_to_string(vm.run(True)))
 
+    vm2 = VirtualMachine(poolsize)
+    vm2.add_op(Instruction.IMM)
+    vm2.add_op(1)
+    vm2.add_op(Instruction.PUSH)
+    vm2.add_op(Instruction.IMM)
+    vm2.add_op(2)
+    vm2.add_op(Instruction.ADD)
+    vm2.add_op(Instruction.PUSH)
+    vm2.add_op(Instruction.EXIT)
+    print(vm2.run(True))
+
 
 def main():
     # Just for test.

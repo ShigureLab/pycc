@@ -32,17 +32,6 @@ namespace vm {
 // |                  |  <-- PC
 // +------------------+
 
-AddressRegister pc;  // PC, 程序计数器
-AddressRegister bp;  // BP, 基址指针
-AddressRegister sp;  // SP, 堆栈指针
-Register ax;         // 通用寄存器
-Register cycle;
-
-int64 *text,    // 代码段
-    *old_text,  // for dump text segment
-    *stack;     // 栈区
-char *data;     // 数据段
-
 const std::string instruction_name[] = {
     "LEA",  "IMM",  "JMP",  "CALL", "JZ",   "JNZ",  "ENT",  "ADJ",
     "LEV",  "LI",   "LC",   "SI",   "SC",   "PUSH", "OR",   "XOR",
@@ -55,54 +44,67 @@ bool test_cpp_connect(int k) {
   std::cout << "test_cpp_connect in c++ code." << std::endl;
   return true;
 }
-
-Status init_vm(int poolsize) {
-  // TODO: 确保单例
-  // 分配
-  if (!(text = old_text = (int64 *)std::malloc(poolsize))) {
-    std::cerr << "[ERROR] Could not malloc for text area" << std::endl;
-    return Status::MEMORY_ERROR;
-  }
-  if (!(data = (char *)std::malloc(poolsize))) {
-    std::cerr << "[ERROR] Could not malloc for data area" << std::endl;
-    return Status::MEMORY_ERROR;
-  }
-  if (!(stack = (int64 *)std::malloc(poolsize))) {
-    std::cerr << "[ERROR] Could not malloc for stack area" << std::endl;
-    return Status::MEMORY_ERROR;
-  }
-
-  reset_vm(poolsize);
-
-  std::cout << "[INFO] Init vm success." << std::endl;
-  return Status::OK;
+VirtualMachineCpp::VirtualMachineCpp() {
 }
 
-void reset_vm(int poolsize) {
-  std::memset(text, 0, poolsize);
-  std::memset(data, 0, poolsize);
-  std::memset(stack, 0, poolsize);
-
-  bp = sp = stack + poolsize / sizeof(int64);  // BP、SP 初始化为栈底
-  ax = 0;                                      // 清空通用寄存器 AX
-  pc = text;                                   // PC 指向代码段起始地址
+VirtualMachineCpp::VirtualMachineCpp(int poolsize) {
+  this->poolsize = poolsize;
+  if (this->_allocate_memory() == Status::OK) {
+    std::cout << "[INFO] Init vm success." << std::endl;
+  }
+  this->reset();
 }
 
-void free_vm() {
-  std::free(text);
-  std::free(data);
-  std::free(stack);
+VirtualMachineCpp::~VirtualMachineCpp() {
+  std::free(this->text);
+  std::free(this->data);
+  std::free(this->stack);
   std::cout << "[INFO] Free vm success." << std::endl;
 }
 
-int64 run_vm(bool debug = false) {
+Status VirtualMachineCpp::_allocate_memory() {
+  if (!(this->text = old_text = (int64 *)std::malloc(poolsize))) {
+    std::cerr << "[ERROR] Could not malloc for text area" << std::endl;
+    return Status::MEMORY_ERROR;
+  }
+  if (!(this->data = (char *)std::malloc(poolsize))) {
+    std::cerr << "[ERROR] Could not malloc for data area" << std::endl;
+    return Status::MEMORY_ERROR;
+  }
+  if (!(this->stack = (int64 *)std::malloc(poolsize))) {
+    std::cerr << "[ERROR] Could not malloc for stack area" << std::endl;
+    return Status::MEMORY_ERROR;
+  }
+  return Status::OK;
+}
+
+void VirtualMachineCpp::reset() {
+  std::memset(this->text, 0, this->poolsize);
+  std::memset(this->data, 0, this->poolsize);
+  std::memset(this->stack, 0, this->poolsize);
+
+  this->op_counter_ = 0;
+  this->bp = this->sp =
+      this->stack + poolsize / sizeof(int64);  // BP、SP 初始化为栈底
+  this->ax = 0;                                // 清空通用寄存器 AX
+  this->pc = text;                             // PC 指向代码段起始地址
+}
+
+void VirtualMachineCpp::add_op(int64 op) {
+  this->text[this->op_counter_++] = op;
+  if (this->op_counter_ > this->poolsize) {
+    std::cerr << "[ERROR] op counter overflow" << std::endl;
+  }
+}
+
+int64 VirtualMachineCpp::run(bool debug = false) {
   Register op;
   AddressRegister tmp;
 
-  cycle = 0;
+  this->cycle = 0;
   while (true) {
-    cycle++;       // 记录一共经历了多少指令周期
-    op = *(pc++);  // 获取当前指令
+    this->cycle++;  // 记录一共经历了多少指令周期
+    op = *(pc++);   // 获取当前指令
 
     if (debug) {
       std::cout << cycle << "> " << std::left << std::setw(4)
@@ -170,7 +172,7 @@ int64 run_vm(bool debug = false) {
       case MSET: ax = (int64)memset((char *)sp[2], sp[1], sp[0]); break;
       case MCMP: ax = (int64)memcmp((char *)sp[2], (char *)sp[1], sp[0]); break;
       case EXIT:
-        std::cout << "exit(" << *sp << ") cycle = " << cycle << std::endl;
+        std::cout << "exit(" << *sp << ") cycle = " << this->cycle << std::endl;
         return *sp;
       default: std::cerr << "[ERROR] Unknown opcode: " << op << std::endl; return -1;
     }

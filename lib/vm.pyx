@@ -3,11 +3,7 @@ from libc.string cimport strcpy
 
 cimport libvm
 from libvm cimport test_cpp_connect
-from libvm cimport reset_vm
-from libvm cimport free_vm
-from libvm cimport init_vm
-from libvm cimport run_vm
-from libvm cimport text
+from libvm cimport VirtualMachineCpp
 from libvm cimport int64
 
 from enum import Enum
@@ -62,22 +58,18 @@ class Instruction(Enum):
     EXIT = libvm.EXIT
 
 cdef class VirtualMachine:
-    cdef int poolsize
-    cdef int curr
+    cdef VirtualMachineCpp* vmcpp
     def __cinit__(self, int poolsize):
-        self.poolsize = poolsize
-        self.curr = 0
-        init_vm(poolsize)
+        self.vmcpp = new VirtualMachineCpp(poolsize)
 
     def __dealloc__(self):
-        free_vm()
+        del self.vmcpp
 
     def reset(self):
-        self.curr = 0
-        reset_vm(self.poolsize)
+        self.vmcpp.reset()
 
     def run(self, debug: bool) -> int:
-        return run_vm(debug)
+        return self.vmcpp.run(debug)
 
     def add_op(self, op: Union[Instruction, int, str]):
         cdef int64 opcode = 0
@@ -92,8 +84,7 @@ cdef class VirtualMachine:
             c_str = <char *>malloc((len(op) + 1) * sizeof(char))  # 在堆区申请一块空间存放字符串
             strcpy(c_str, b_str)
             opcode = <int64>c_str
-        text[self.curr] = opcode
-        self.curr += 1
+        self.vmcpp.add_op(opcode)
 
 
 def c_pointer_to_string(s_ptr: int64) -> str:
