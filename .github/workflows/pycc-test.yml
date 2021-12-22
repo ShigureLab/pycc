@@ -35,6 +35,12 @@ jobs:
           poetry build
           poetry install
 
-      - name: pycc test
+      - name: pycc python test
         run: |
           poetry run pytest
+
+      - name: pycc c++ test
+        run: |
+          make
+          make run
+          make clean
