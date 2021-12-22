@@ -26,9 +26,17 @@ enum {
 };
 // clang-format on
 
+enum class VMStatusCpp {
+  INIT = 0,
+  RUNNING = 1,
+  EXIT = 2,
+  ERROR = 3,
+};
+
 class VirtualMachineCpp {
  private:
   int op_counter_;
+  int64 result_;
 
  public:
   AddressRegister pc;  // PC, 程序计数器
@@ -37,6 +45,7 @@ class VirtualMachineCpp {
   Register ax;         // 通用寄存器
   Register cycle;
   int poolsize;
+  VMStatusCpp status;
 
   int64 *text,    // 代码段
       *old_text,  // for dump text segment
@@ -49,7 +58,10 @@ class VirtualMachineCpp {
   Status _allocate_memory();
   void reset();
   void add_op(int64 op);
+  VMStatusCpp step(bool debug);
   int64 run(bool debug);
+  int64 run_all_ops(bool debug);
+  int pc_offset();
 };
 
 }  // namespace vm

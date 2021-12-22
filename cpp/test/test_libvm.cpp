@@ -89,6 +89,37 @@ void test_reset_add(int a, int b, int c, int d) {
   std::cout << "[SCUESS] test reset success!" << std::endl;
 }
 
+void test_run_all_ops_add(int a, int b) {
+  vm::VirtualMachineCpp vmcpp = vm::VirtualMachineCpp(poolsize);
+  vm::int64 result;
+
+  vmcpp.add_op(vm::IMM);
+  vmcpp.add_op(a);
+  vmcpp.add_op(vm::PUSH);
+  vmcpp.add_op(vm::IMM);
+
+  vmcpp.run_all_ops(true);
+  std::cout << "[INFO] Stop at here!" << std::endl;
+
+  vmcpp.add_op(b);
+  vmcpp.add_op(vm::ADD);
+
+  vmcpp.run_all_ops(true);
+  std::cout << "[INFO] Stop at here!" << std::endl;
+
+  vmcpp.add_op(vm::PUSH);
+
+  vmcpp.run_all_ops(true);
+  std::cout << "[INFO] Stop at here!" << std::endl;
+
+  vmcpp.add_op(vm::EXIT);
+
+  result = vmcpp.run_all_ops(true);
+  assert(result == a + b);
+  std::cout << "[SCUESS] test a(" << a << ") + b(" << b << ") = " << result
+            << " success!" << std::endl;
+}
+
 int main() {
   test_add(10, 20);
   test_add(9, -10);
@@ -101,6 +132,7 @@ int main() {
   test_string((char *)"456");
 
   test_reset_add(1, 6, 9, -100);
+  test_run_all_ops_add(10, 40);
 
   return 0;
 }

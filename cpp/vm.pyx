@@ -5,6 +5,7 @@ from cython.operator cimport dereference
 cimport libvm
 from libvm cimport VirtualMachineCpp
 from libvm cimport int64
+from libvm cimport VMStatusCpp
 
 from enum import Enum
 from typing import Union
@@ -50,6 +51,12 @@ class Instruction(Enum):
     MCMP = libvm.MCMP
     EXIT = libvm.EXIT
 
+class VMStatus(Enum):
+    INIT = libvm.VM_INIT
+    RUNNING = libvm.VM_RUNNING
+    EXIT = libvm.VM_EXIT
+    ERROR = libvm.VM_ERROR
+
 cdef class VirtualMachine:
     cdef VirtualMachineCpp* vmcpp
     def __cinit__(self, int poolsize):
@@ -61,8 +68,8 @@ cdef class VirtualMachine:
     def reset(self):
         self.vmcpp.reset()
 
-    def run(self, debug: bool) -> int:
-        return self.vmcpp.run(debug)
+    def step(self, debug: bool = False) -> VMStatus:
+        return VMStatus(self.vmcpp.step(debug))
 
     def add_op(self, op: Union[Instruction, int, str]):
         cdef int64 opcode = 0
@@ -78,6 +85,15 @@ cdef class VirtualMachine:
             strcpy(c_str, b_str)
             opcode = <int64>c_str
         self.vmcpp.add_op(opcode)
+
+    def run(self, debug: bool = False) -> int:
+        return self.vmcpp.run(debug)
+
+    def run_all_ops(self, debug: bool = False) -> int:
+        return self.vmcpp.run_all_ops(debug)
+
+    def pc_offset(self) -> int:
+        return self.vmcpp.pc_offset()
 
     @property
     def poolsize(self) -> int:
@@ -102,6 +118,10 @@ cdef class VirtualMachine:
     @property
     def cycle(self) -> int:
         return <int64>self.vmcpp.cycle
+
+    @property
+    def status(self) -> VMStatus:
+        return VMStatus(self.vmcpp.status)
 
 cdef bytes _c_pointer_to_string(int64 s_ptr):
     cdef bytes b_str = <char *>s_ptr

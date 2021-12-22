@@ -1,5 +1,5 @@
 CXX = clang++
-TARGET_DIR = "target"
+TARGET_DIR = target
 VM_SRC = cpp/src/libvm.cpp
 VM_O = $(TARGET_DIR)/libvm.o
 TEST_VM_SRC = cpp/test/test_libvm.cpp

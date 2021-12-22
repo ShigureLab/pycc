@@ -52,9 +52,16 @@ make run # 运行 C++ 部分测试代码
 -  [ ] VM
    -  [x] Python side 更多可访问的属性
    -  [x] 初始化相关测试
-   -  [ ] 单步调试
+   -  [x] 单步调试
+   -  [ ] 显示所有寄存器的方法
+   -  [ ] 显示局部内存的方法
 -  [ ] Lexer
 -  [ ] 语法分析
 -  [ ] docs
    -  [ ] 文件结构说明
--  [ ] CI
+-  [x] CI
+
+## References
+
+-  [C4](https://github.com/rswier/c4)
+-  [diy-c-compiler](https://wizardforcel.gitbooks.io/diy-c-compiler/content/1.html)
