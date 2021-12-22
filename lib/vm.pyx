@@ -2,19 +2,11 @@ from libc.stdlib cimport malloc
 from libc.string cimport strcpy
 
 cimport libvm
-from libvm cimport test_cpp_connect
 from libvm cimport VirtualMachineCpp
 from libvm cimport int64
 
 from enum import Enum
 from typing import Union
-
-cdef _test_cython_connect(int n):
-    test_cpp_connect(n)
-    print("test_cython_connect in cython code.")
-
-def test_cython_connect(n: int):
-    _test_cython_connect(n)
 
 class Instruction(Enum):
     LEA = libvm.LEA
@@ -86,7 +78,10 @@ cdef class VirtualMachine:
             opcode = <int64>c_str
         self.vmcpp.add_op(opcode)
 
-
-def c_pointer_to_string(s_ptr: int64) -> str:
+cdef bytes _c_pointer_to_string(int64 s_ptr):
     cdef bytes b_str = <char *>s_ptr
+    return b_str
+
+def c_pointer_to_string(s_ptr: int) -> str:
+    b_str = _c_pointer_to_string(s_ptr)
     return b_str.decode()

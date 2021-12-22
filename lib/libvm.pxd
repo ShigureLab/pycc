@@ -28,5 +28,3 @@ cdef extern from "libvm.hpp" namespace "vm":
         void reset()
         void add_op(int64 op)
         int64 run(bool debug)
-
-    bool test_cpp_connect(int k)

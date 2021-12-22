@@ -1,11 +1,6 @@
 import argparse
 
-from pycc.vm import VirtualMachine, test_cython_connect, Instruction, c_pointer_to_string
-
-
-def test_python_code():
-    test_cython_connect(1)
-    print("test_python_code in python code.")
+from pycc.vm import VirtualMachine, Instruction, c_pointer_to_string
 
 
 def test_vm():
@@ -44,7 +39,6 @@ def test_vm():
 
 def main():
     # Just for test.
-    test_python_code()
     test_vm()
 
     parser = argparse.ArgumentParser("pycc", description="A simple C compiler.")

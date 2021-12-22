@@ -90,8 +90,6 @@ void test_reset_add(int a, int b, int c, int d) {
 }
 
 int main() {
-  vm::test_cpp_connect(1);
-
   test_add(10, 20);
   test_add(9, -10);
   test_add(1000, -1000);
