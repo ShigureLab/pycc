@@ -19,10 +19,16 @@ poetry build # 编译构建 C++ 部分
 poetry install # 将 C++ 编译结果安装到 Python 代码对应位置
 ```
 
-### Run
+### Run pycc
 
 ```bash
-poetry run pycc
+poetry run pycc <src>
+```
+
+### Run tests
+
+```bash
+poetry run pytest
 ```
 
 ## C++ Side
