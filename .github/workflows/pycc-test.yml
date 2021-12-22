@@ -32,6 +32,9 @@ jobs:
         if: steps.poetry-cache.outputs.cache-hit != 'true'
         run: |
           poetry install
+
+      - name: Build self
+        run: |
           poetry build
           poetry install
 
