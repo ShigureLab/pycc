@@ -1,5 +1,13 @@
 # pycc [WIP]
 
+<p align="center">
+   <a href="https://github.com/ShigureLab"><img src="https://img.shields.io/badge/ShigureLab-cyan?style=flat-square" alt="ShigureLab"></a>
+   <a href="https://actions-badge.atrox.dev/ShigureLab/pycc/goto?ref=main"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FShigureLab%2Fpycc%2Fbadge%3Fref%3Dmain&label=Tests&style=flat-square" /></a>
+   <a href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000?style=flat-square"></a>
+   <a href="https://gitmoji.dev"><img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67?style=flat-square" alt="Gitmoji"></a>
+   <a href="LICENSE"><img alt="LICENSE" src="https://img.shields.io/github/license/ShigureLab/pycc?style=flat-square"></a>
+</p>
+
 A simple C language compiler implemented by Python.
 
 ## Build and Run
