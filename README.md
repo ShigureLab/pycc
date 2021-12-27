@@ -12,6 +12,20 @@ A simple C language compiler implemented by Python.
 
 ## Build and Run
 
+### Run in Docker
+
+如果本地环境配置太麻烦，可以尝试使用 Docker 来运行，这里给出构建 Docker 和 启动 Docker 的命令：
+
+当然如果你已经成功配置好本地环境，完全可以跳过这一步
+
+```bash
+docker build -t siguremo/pycc:pre .
+# Windows 可能需要手动将 $PWD 换成自己当前的绝对路径
+docker run --name pycc-dev -v $PWD:/pycc -w /pycc --network=host --rm -it siguremo/pycc:pre /bin/bash
+```
+
+之后就可以在 Docker 里运行相关命令了
+
 ### Python Side
 
 首先确保[安装 poetry](https://python-poetry.org/docs/#installation)
