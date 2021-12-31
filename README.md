@@ -30,17 +30,12 @@ docker run --name pycc-dev -v $PWD:/pycc -w /pycc --network=host --rm -it sigure
 
 首先确保[安装 poetry](https://python-poetry.org/docs/#installation)
 
-#### Install build tools
+#### Install and Build
+
+如果是 Windows 需要预先自行额外安装 VS Build Tools
 
 ```bash
-poetry install # 首先确保 Cython 安装，如果是 Windows 需要自行额外安装 VS Build Tools
-```
-
-#### Build
-
-```bash
-poetry build # 编译构建 C++ 部分
-poetry install # 将 C++ 编译结果安装到 Python 代码对应位置
+poetry install
 ```
 
 #### Run pycc
