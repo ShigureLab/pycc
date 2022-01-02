@@ -1,0 +1,68 @@
+# 表达式
+# expr ->
+#     | expr <Comma> assign_expr
+#     | assign_expr
+
+expr -> assign_expr expr_tail
+expr_tail ->
+    | <Comma> assign_expr expr_tail
+    | <empty>
+
+# 赋值表达式
+# assign_expr ->
+#     | <Id> <Assign> assign_expr
+#     | sum_expr
+
+assign_expr -> sum_expr assign_expr_tail
+assign_expr_tail ->
+    | <Id> <Assign> assign_expr assign_expr_tail
+    | <empty>
+
+# 加减号
+# sum_expr ->
+#     | sum_expr <Add> term
+#     | sum_expr <Sub> term
+#     | term
+
+sum_expr -> term sum_expr_tail
+sum_expr_tail ->
+    | <Add> term sum_expr_tail
+    | <Sub> term sum_expr_tail
+    | <empty>
+
+# 乘除号
+# term ->
+#     | term <Mul> factor
+#     | term <Div> factor
+#     | factor
+
+term -> factor term_tail
+term_tail ->
+    | <Mul> factor term_tail
+    | <Div> factor term_tail
+    | <empty>
+
+factor ->
+    | <Id>
+    | <Num>
+    | <Chr>
+    | <Lpar> expr <Rpar>
+
+type ->
+    | <Int>
+    | <Float>
+    | <Char>
+    | <Void>
+
+declare ->
+    | type <Id> <Assign> expr
+    | type <Id>
+
+stmt ->
+    | expr <Semi>
+    | declare <Semi>
+    | <Return> expr <Semi>
+
+stmts ->
+    | stmt stmts
+    | <empty>
