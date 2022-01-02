@@ -4,6 +4,7 @@ import argparse
 from pycc.lexer import Token, match_comments, match_whitespace, Lexer
 from pycc.lexer import Int
 from pycc.parser import Parser
+from pycc.utils import logger
 
 
 def main():
@@ -13,7 +14,7 @@ def main():
     parser.add_argument("src", type=str, help="Path to source file")
     args, extra_args = parser.parse_known_args()
     if extra_args:
-        print("[INFO] Extra arguments: ", " ".join(extra_args))
+        logger.info("Extra arguments: ", " ".join(extra_args))
 
     # 读入源代码
     with open(args.src, "r") as f:
@@ -27,8 +28,8 @@ def main():
     token_stream = lexer.tokenize()
     print(token_stream)
     # 语法分析
-    parser = Parser(source_code)
-    print(parser.term())
+    parser = Parser(source_code, debug=True)
+    print(parser.sum_expr())
 
 
 if __name__ == "__main__":

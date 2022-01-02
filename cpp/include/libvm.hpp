@@ -4,6 +4,17 @@
 #include <iostream>
 #include <memory>
 
+namespace log {
+const std::string INFO_BADGE = "\x1b[94m INFO \x1b[0m";
+const std::string WARNING_BADGE = "\x1b[33m WARN \x1b[0m";
+const std::string ERROR_BADGE = "\x1b[1m\x1b[31m ERROR \x1b[0m\x1b[1m\x1b[0m";
+const std::string DEBUG_BADGE = "\x1b[32m DEBUG \x1b[0m";
+const std::string SCUESS_BADGE =
+    "\x1b[30m\x1b[42m SCUESS \x1b[0m\x1b[30m\x1b[0m";
+const std::string FAIL_BADGE = "\x1b[30m\x1b[41m FAIL \x1b[0m\x1b[30m\x1b[0m";
+
+}  // namespace log
+
 namespace vm {
 using int64 = long long int;
 using uint64 = unsigned long long int;

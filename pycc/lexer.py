@@ -2,6 +2,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, Optional
 from enum import Enum
+from pycc.utils import logger
 
 
 class CType(Enum):
@@ -158,11 +159,11 @@ def match_comments(string: str, pos: int) -> Optional[re.Match[str]]:
     regexp_comments_slash_star = re.compile(r"/\*[\s\S]*?\*/")
     if string.startswith("//", pos):
         match_obj = regexp_comments_double_slash.match(string, pos)
-        assert match_obj is not None, "[Error] Unterminated comment"
+        assert match_obj is not None, f"{logger.ERROR_BADGE} Unterminated comment"
         return match_obj
     elif string.startswith("/*", pos):
         match_obj = regexp_comments_slash_star.match(string, pos)
-        assert match_obj is not None, "[Error] Unterminated comment"
+        assert match_obj is not None, f"{logger.ERROR_BADGE} Unterminated comment"
         return match_obj
     else:
         return None

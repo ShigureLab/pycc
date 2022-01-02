@@ -46,7 +46,7 @@ VirtualMachineCpp::VirtualMachineCpp() {
 VirtualMachineCpp::VirtualMachineCpp(int poolsize) {
   this->poolsize = poolsize;
   if (this->_allocate_memory() == Status::OK) {
-    std::cout << "[INFO] Init vm success." << std::endl;
+    std::cout << log::INFO_BADGE << " Init vm success." << std::endl;
   }
   this->reset();
 }
@@ -55,20 +55,23 @@ VirtualMachineCpp::~VirtualMachineCpp() {
   std::free(this->text);
   std::free(this->data);
   std::free(this->stack);
-  std::cout << "[INFO] Free vm success." << std::endl;
+  std::cout << log::INFO_BADGE << " Free vm success." << std::endl;
 }
 
 Status VirtualMachineCpp::_allocate_memory() {
   if (!(this->text = old_text = (int64 *)std::malloc(poolsize))) {
-    std::cerr << "[ERROR] Could not malloc for text area" << std::endl;
+    std::cerr << log::ERROR_BADGE << " Could not malloc for text area"
+              << std::endl;
     return Status::MEMORY_ERROR;
   }
   if (!(this->data = (char *)std::malloc(poolsize))) {
-    std::cerr << "[ERROR] Could not malloc for data area" << std::endl;
+    std::cerr << log::ERROR_BADGE << " Could not malloc for data area"
+              << std::endl;
     return Status::MEMORY_ERROR;
   }
   if (!(this->stack = (int64 *)std::malloc(poolsize))) {
-    std::cerr << "[ERROR] Could not malloc for stack area" << std::endl;
+    std::cerr << log::ERROR_BADGE << " Could not malloc for stack area"
+              << std::endl;
     return Status::MEMORY_ERROR;
   }
   return Status::OK;
@@ -106,8 +109,8 @@ VMStatusCpp VirtualMachineCpp::step(bool debug = false) {
   op = *(pc++);  // 获取当前指令
 
   if (debug) {
-    std::cout << cycle << "> " << std::left << std::setw(4)
-              << instruction_name[op];
+    std::cout << log::DEBUG_BADGE << " " << cycle << "> " << std::left
+              << std::setw(4) << instruction_name[op];
     if (op <= ADJ) {  // 含操作数指令，额外打印操作数
       std::cout << " " << *pc;
     }
@@ -193,7 +196,7 @@ int64 VirtualMachineCpp::run(bool debug = false) {
         return this->result_;
       }
     } else {
-      std::cout << "[WARNING] pc out of op_counter" << std::endl;
+      std::cout << log::WARNING_BADGE << " pc out of op_counter" << std::endl;
     }
   }
 }
