@@ -18,7 +18,7 @@ void test_add(int a, int b) {
 
   result = vmcpp.run(true);
   assert(result == a + b);
-  std::cout << log::SCUESS_BADGE << " test a(" << a << ") + b(" << b
+  std::cout << logger::SCUESS_BADGE << " test a(" << a << ") + b(" << b
             << ") = " << result << " success!" << std::endl;
 }
 
@@ -37,7 +37,7 @@ void test_multiply(int a, int b) {
 
   result = vmcpp.run(true);
   assert(result == a * b);
-  std::cout << log::SCUESS_BADGE << " test a(" << a << ") * b(" << b
+  std::cout << logger::SCUESS_BADGE << " test a(" << a << ") * b(" << b
             << ") = " << result << " success!" << std::endl;
 }
 
@@ -53,7 +53,7 @@ void test_string(char *s) {
   result = (char *)vmcpp.run(true);
 
   assert(std::string(result) == s);
-  std::cout << log::SCUESS_BADGE << " test s(" << s << ") = " << result
+  std::cout << logger::SCUESS_BADGE << " test s(" << s << ") = " << result
             << " success!" << std::endl;
 }
 
@@ -86,7 +86,7 @@ void test_reset_add(int a, int b, int c, int d) {
 
   result = vmcpp.run(true);
   assert(result == c + d);
-  std::cout << log::SCUESS_BADGE << " test reset success!" << std::endl;
+  std::cout << logger::SCUESS_BADGE << " test reset success!" << std::endl;
 }
 
 void test_run_all_ops_add(int a, int b) {
@@ -99,24 +99,24 @@ void test_run_all_ops_add(int a, int b) {
   vmcpp.add_op(vm::IMM);
 
   vmcpp.run_all_ops(true);
-  std::cout << log::INFO_BADGE << " Stop at here!" << std::endl;
+  std::cout << logger::INFO_BADGE << " Stop at here!" << std::endl;
 
   vmcpp.add_op(b);
   vmcpp.add_op(vm::ADD);
 
   vmcpp.run_all_ops(true);
-  std::cout << log::INFO_BADGE << " Stop at here!" << std::endl;
+  std::cout << logger::INFO_BADGE << " Stop at here!" << std::endl;
 
   vmcpp.add_op(vm::PUSH);
 
   vmcpp.run_all_ops(true);
-  std::cout << log::INFO_BADGE << " Stop at here!" << std::endl;
+  std::cout << logger::INFO_BADGE << " Stop at here!" << std::endl;
 
   vmcpp.add_op(vm::EXIT);
 
   result = vmcpp.run_all_ops(true);
   assert(result == a + b);
-  std::cout << log::SCUESS_BADGE << " test a(" << a << ") + b(" << b
+  std::cout << logger::SCUESS_BADGE << " test a(" << a << ") + b(" << b
             << ") = " << result << " success!" << std::endl;
 }
 
