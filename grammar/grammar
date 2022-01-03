@@ -9,14 +9,9 @@ expr_tail ->
     | <empty>
 
 # 赋值表达式
-# assign_expr ->
-#     | <Id> <Assign> assign_expr
-#     | sum_expr
-
-assign_expr -> sum_expr assign_expr_tail
-assign_expr_tail ->
-    | <Id> <Assign> assign_expr assign_expr_tail
-    | <empty>
+assign_expr ->
+    | <Id> <Assign> assign_expr
+    | sum_expr
 
 # 加减号
 # sum_expr ->
@@ -54,9 +49,14 @@ type ->
     | <Char>
     | <Void>
 
-declare ->
-    | type <Id> <Assign> expr
-    | type <Id>
+# declare ->
+#     | type <Id> <Assign> expr
+#     | type <Id>
+
+declare -> type <Id> declare_tail
+declare_tail ->
+      | <Assign> expr
+      | <empty>
 
 stmt ->
     | expr <Semi>

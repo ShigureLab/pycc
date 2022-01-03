@@ -1,18 +1,8 @@
 import re
 from dataclasses import dataclass
 from typing import Any, Optional
-from enum import Enum
+
 from pycc.utils import logger
-
-
-class CType(Enum):
-
-    int = 0
-    float = 1
-    char = 2
-    ptr = 3
-
-    # TODO: ptr to type
 
 
 @dataclass
@@ -43,7 +33,13 @@ class Num(Token):
         self.value = eval(string)
 
 
-# class Chr(Token):
+class Chr(Token):
+    value: str
+    regexp = re.compile(r"'[\s\S]'")
+    has_value = True
+
+    def __init__(self, string: str):
+        self.value = string
 
 
 # class Fun(Token):
@@ -53,14 +49,25 @@ class Num(Token):
 # class Enum(Token):
 # class If(Token):
 # class Else(Token):
+# class While(Token):
 class Int(Token):
     value: None
     regexp = re.compile(r"int^[a-zA-Z_]")
 
 
-# class Char(Token):
-# class Void(Token):
-# class Float(Token):
+class Char(Token):
+    value: None
+    regexp = re.compile(r"char^[a-zA-Z_]")
+
+
+class Void(Token):
+    value: None
+    regexp = re.compile(r"void^[a-zA-Z_]")
+
+
+class Float(Token):
+    value: None
+    regexp = re.compile(r"float^[a-zA-Z_]")
 
 
 class Return(Token):
@@ -73,7 +80,6 @@ class Sizeof(Token):
     regexp = re.compile(r"sizeof^[a-zA-Z_]")
 
 
-# class While(Token):
 class Assign(Token):
     value: None
     regexp = re.compile(r"=")

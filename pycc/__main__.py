@@ -17,7 +17,7 @@ def main():
         logger.info("Extra arguments: ", " ".join(extra_args))
 
     # 读入源代码
-    with open(args.src, "r") as f:
+    with open(args.src, "r", encoding="utf-8") as f:
         source_code = f.read()
 
     # 词法分析
@@ -29,7 +29,9 @@ def main():
     print(token_stream)
     # 语法分析
     parser = Parser(source_code, debug=True)
-    print(parser.sum_expr())
+    print(parser.stmts())
+    for key in parser.symbols:
+        print(parser.symbols[key])
 
 
 if __name__ == "__main__":
