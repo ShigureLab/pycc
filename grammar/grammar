@@ -41,7 +41,7 @@ factor ->
     | <Id>
     | <Num>
     | <Chr>
-    | <Lpar> expr <Rpar>
+    | <Lparbrak> expr <Rparbrak>
 
 type ->
     | <Int>
@@ -49,6 +49,7 @@ type ->
     | <Char>
     | <Void>
 
+# 变量声明
 # declare ->
 #     | type <Id> <Assign> expr
 #     | type <Id>
@@ -58,11 +59,45 @@ declare_tail ->
       | <Assign> expr
       | <empty>
 
+# stmt ->
+#     | expr <Semi>
+#     | declare <Semi>
+#     | <Return> expr <Semi>
+#     | <If> <Lparbrak> expr <Rparbrak> stmt <Else> stmt
+#     | <If> <Lparbrak> expr <Rparbrak>
+#     | <While> <Lparbrak> expr <Rparbrak> stmt
+#     | <Lcurbrak> stmts <Rparbrak>
+
 stmt ->
     | expr <Semi>
     | declare <Semi>
     | <Return> expr <Semi>
+    | <If> <Lparbrak> expr <Rparbrak> else_branch
+    | <While> <Lparbrak> expr <Rparbrak> stmt
+    | <Lcurbrak> stmts <Rparbrak>
+
+else_branch ->
+    | <Else> stmt
+    | <empty>
 
 stmts ->
     | stmt stmts
+    | <empty>
+
+S ->
+    | S_tail S
+    | <empty>
+
+S_tail ->
+    | declare <Semi>
+    | func_declare <Semi>
+    | func_declare <Lcurbrak> stmts <Rcurbrak>
+
+func_declare -> type <Id> <Lparbrak> func_params <Rparbrak>
+func_params ->
+    | type <Id> func_params_tail
+    | <empty>
+
+func_params_tail ->
+    | <Comma> type <Id> func_params_tail
     | <empty>

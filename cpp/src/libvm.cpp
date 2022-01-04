@@ -88,6 +88,7 @@ void VirtualMachineCpp::reset() {
       this->stack + poolsize / sizeof(int64);  // BP、SP 初始化为栈底
   this->ax = 0;                                // 清空通用寄存器 AX
   this->pc = text;                             // PC 指向代码段起始地址
+  this->current_data = data;
   this->cycle = 0;  // 记录一共经历了多少指令周期
 }
 
@@ -96,6 +97,13 @@ void VirtualMachineCpp::add_op(int64 op) {
   if (this->op_counter_ > this->poolsize) {
     std::cerr << "[ERROR] op counter overflow" << std::endl;
   }
+}
+
+int64 VirtualMachineCpp::put_int_onto_data(int value) {
+  int64 current_ptr = (int64)this->current_data;
+  *(int *)this->current_data = value;
+  this->current_data += sizeof(int);
+  return current_ptr;
 }
 
 VMStatusCpp VirtualMachineCpp::step(bool debug = false) {

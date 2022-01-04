@@ -34,6 +34,7 @@ cdef extern from "include/libvm.hpp" namespace "vm":
         char *data          # 数据段
         void reset()
         void add_op(int64 op)
+        int64 put_int_onto_data(int value)
         VMStatusCpp step(bool debug)
         int64 run(bool debug)
         int64 run_all_ops(bool debug)

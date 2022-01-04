@@ -58,10 +58,11 @@ class VirtualMachineCpp {
   int poolsize;
   VMStatusCpp status;
 
-  int64 *text,    // 代码段
-      *old_text,  // for dump text segment
-      *stack;     // 栈区
-  char *data;     // 数据段
+  int64 *text,        // 代码段
+      *old_text,      // for dump text segment
+      *stack;         // 栈区
+  char *data,         // 数据段
+      *current_data;  // 当前数据指针
 
   VirtualMachineCpp();
   VirtualMachineCpp(int poolsize);
@@ -69,6 +70,7 @@ class VirtualMachineCpp {
   Status _allocate_memory();
   void reset();
   void add_op(int64 op);
+  int64 put_int_onto_data(int value);
   VMStatusCpp step(bool debug);
   int64 run(bool debug);
   int64 run_all_ops(bool debug);

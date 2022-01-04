@@ -86,6 +86,9 @@ cdef class VirtualMachine:
             opcode = <int64>c_str
         self.vmcpp.add_op(opcode)
 
+    def put_int_onto_data(self, value: int) -> int:
+        return self.vmcpp.put_int_onto_data(value)
+
     def run(self, debug: bool = False) -> int:
         return self.vmcpp.run(debug)
 

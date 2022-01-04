@@ -134,3 +134,52 @@ def test_registers():
     assert c_pointer_to_integer(vm.bp) == 0
     assert c_pointer_to_integer(vm.sp) == 0
     assert result == a + b
+
+
+@pytest.mark.parametrize(
+    "a",
+    [
+        10086,
+        -1111,
+    ],
+)
+def test_global_declare(a: int):
+    global poolsize
+    vm = VirtualMachine(poolsize)
+
+    ptr_a = vm.put_int_onto_data(a)
+    vm.add_op(Instruction.IMM)
+    vm.add_op(ptr_a)
+    vm.add_op(Instruction.LI)
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.EXIT)
+
+    result = vm.run(True)
+    assert result == a
+
+
+@pytest.mark.parametrize(
+    "a, b",
+    [
+        (9999, -8888),
+    ],
+)
+def test_global_add(a: int, b: int):
+    global poolsize
+    vm = VirtualMachine(poolsize)
+
+    ptr_a = vm.put_int_onto_data(a)
+    ptr_b = vm.put_int_onto_data(b)
+    vm.add_op(Instruction.IMM)
+    vm.add_op(ptr_a)
+    vm.add_op(Instruction.LI)
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.IMM)
+    vm.add_op(ptr_b)
+    vm.add_op(Instruction.LI)
+    vm.add_op(Instruction.ADD)
+    vm.add_op(Instruction.PUSH)
+    vm.add_op(Instruction.EXIT)
+
+    result = vm.run(True)
+    assert result == a + b

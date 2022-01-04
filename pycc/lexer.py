@@ -43,9 +43,21 @@ class Chr(Token):
 
 
 # class Enum(Token):
-# class If(Token):
-# class Else(Token):
-# class While(Token):
+class If(Token):
+    value: str
+    regexp = re.compile(r"if[^a-zA-Z0-9_]")
+
+
+class Else(Token):
+    value: str
+    regexp = re.compile(r"else[^a-zA-Z0-9_]")
+
+
+class While(Token):
+    value: str
+    regexp = re.compile(r"while[^a-zA-Z0-9_]")
+
+
 class Int(Token):
     value: None
     regexp = re.compile(r"int[^a-zA-Z0-9_]")
@@ -103,8 +115,16 @@ class Rparbrak(Token):  # )
     regexp = re.compile(r"\)")
 
 
-# class Lcurbrak(Token): # {
-# class Rcurbrak(Token): # }
+class Lcurbrak(Token):  # {
+    value: None
+    regexp = re.compile(r"\{")
+
+
+class Rcurbrak(Token):  # }
+    value: None
+    regexp = re.compile(r"\}")
+
+
 # class Cond(Token):
 # class Lor(Token):
 # class Lan(Token):
