@@ -14,20 +14,19 @@ class IdType(Enum):
     # TODO: ptr to type
 
 
-class IdScope(Enum):
-    Local = 0
+class IdLevel(Enum):
+    BuildIn = 0
     Global = 1
+    Local = 2
 
 
 @dataclass
 class Symbol:
     name: str = ""
     token_cls: Optional[Type[Token]] = None
-    scope: Optional[IdScope] = None
+    level: Optional[IdLevel] = None
     value: Any = None
-    global_token_cls: Optional[Type[Token]] = None
-    global_scope: Optional[IdScope] = None
-    global_value: Any = None
+    top_level: Optional["Symbol"] = None
 
 
 SymbolTable = dict[str, Symbol]

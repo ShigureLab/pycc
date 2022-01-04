@@ -42,42 +42,38 @@ class Chr(Token):
         self.value = string
 
 
-# class Fun(Token):
-# class Sys(Token):
-# class Glo(Token):
-# class Loc(Token):
 # class Enum(Token):
 # class If(Token):
 # class Else(Token):
 # class While(Token):
 class Int(Token):
     value: None
-    regexp = re.compile(r"int^[a-zA-Z_]")
+    regexp = re.compile(r"int[^a-zA-Z0-9_]")
 
 
 class Char(Token):
     value: None
-    regexp = re.compile(r"char^[a-zA-Z_]")
+    regexp = re.compile(r"char[^a-zA-Z0-9_]")
 
 
 class Void(Token):
     value: None
-    regexp = re.compile(r"void^[a-zA-Z_]")
+    regexp = re.compile(r"void[^a-zA-Z0-9_]")
 
 
 class Float(Token):
     value: None
-    regexp = re.compile(r"float^[a-zA-Z_]")
+    regexp = re.compile(r"float[^a-zA-Z0-9_]")
 
 
 class Return(Token):
     value: None
-    regexp = re.compile(r"return^[a-zA-Z_]")
+    regexp = re.compile(r"return[^a-zA-Z0-9_]")
 
 
 class Sizeof(Token):
     value: None
-    regexp = re.compile(r"sizeof^[a-zA-Z_]")
+    regexp = re.compile(r"sizeof[^a-zA-Z0-9_]")
 
 
 class Assign(Token):
@@ -95,20 +91,20 @@ class Comma(Token):
     regexp = re.compile(r",")
 
 
-# class Lsqbrac(Token): # [
-# class Rsqbrac(Token): # ]
-class Lpar(Token):  # (
+# class Lsqubrak(Token): # [
+# class Rsqubrak(Token): # ]
+class Lparbrak(Token):  # (
     value: None
     regexp = re.compile(r"\(")
 
 
-class Rpar(Token):  # )
+class Rparbrak(Token):  # )
     value: None
     regexp = re.compile(r"\)")
 
 
-# class Lcubrac(Token): # {
-# class Rcubrac(Token): # }
+# class Lcurbrak(Token): # {
+# class Rcurbrak(Token): # }
 # class Cond(Token):
 # class Lor(Token):
 # class Lan(Token):

@@ -8,11 +8,11 @@ from pycc.lexer import (
     Id,
     Int,
     Lexer,
-    Lpar,
+    Lparbrak,
     Mul,
     Num,
     Return,
-    Rpar,
+    Rparbrak,
     Semi,
     Sub,
     Token,
@@ -21,7 +21,7 @@ from pycc.lexer import (
     Void,
     Assign,
 )
-from pycc.symbols import IdScope, Symbol, SymbolTable
+from pycc.symbols import IdLevel, Symbol, SymbolTable
 from pycc.utils import logger
 
 
@@ -29,6 +29,7 @@ class Parser:
     source_code: str
     lexer: Lexer
     current_token: Optional[Token]
+    current_level: int
     debug: bool
 
     def __init__(self, source_code: str, debug: bool = False):
@@ -37,15 +38,19 @@ class Parser:
         self.current_token = self.next_token()
         self.symbols = SymbolTable()
         self.current_symbol = Symbol()
+        # TODO: 处理 BuildIns
+        self.current_level = 1
         self.debug = debug
 
     def assign_expr(self):
         if self.debug:
             logger.debug("assign_expr:", self.current_token)
         if isinstance(self.current_token, Id):
+            symbol_key = f"{self.current_token.value}@{self.current_level}"
             self.match(Id)
             self.match(Assign)
             value = self.assign_expr()
+            self.symbols[symbol_key].value = value
         else:
             value = self.sum_expr()
         return value
@@ -124,10 +129,10 @@ class Parser:
         # elif isinstance(self.current_token, Chr):
         #     value = self.current_token.value
         #     self.match(Chr)
-        elif isinstance(self.current_token, Lpar):
-            self.match(Lpar)
+        elif isinstance(self.current_token, Lparbrak):
+            self.match(Lparbrak)
             value = self.expr()
-            self.match(Rpar)
+            self.match(Rparbrak)
         else:
             raise Exception(f"Unexpected symbol: {self.current_token}")
         return value
@@ -156,21 +161,29 @@ class Parser:
         if self.debug:
             logger.debug("declare:", self.current_token)
         id_type = self.type()
-        self.current_symbol.token_cls = id_type
+
+        assert isinstance(self.current_token, Id)
+        id_token = self.current_token
         self.match(Id)
-        self.declare_tail()
+        id_symbol = self.current_symbol
+        id_symbol.token_cls = id_type
+
+        if (tail_value := self.declare_tail()) is not None:
+            id_symbol.value = tail_value
 
     def declare_tail(self):
         if self.debug:
             logger.debug("declare_tail:", self.current_token)
+        value = None
         if isinstance(self.current_token, Assign):
             self.match(Assign)
-            self.expr()
+            value = self.expr()
+        return value
 
     def stmt(self):
         if self.debug:
             logger.debug("stmt:", self.current_token)
-        if isinstance(self.current_token, (Id, Num, Chr, Lpar)):
+        if isinstance(self.current_token, (Id, Num, Chr, Lparbrak)):
             print(self.expr())
             self.match(Semi)
         elif isinstance(self.current_token, (Int, Float, Char, Void)):
@@ -184,7 +197,7 @@ class Parser:
     def stmts(self):
         if self.debug:
             logger.debug("stmts:", self.current_token)
-        if isinstance(self.current_token, (Id, Num, Chr, Lpar, Int, Float, Char, Void, Return)):
+        if isinstance(self.current_token, (Id, Num, Chr, Lparbrak, Int, Float, Char, Void, Return)):
             self.stmt()
             self.stmts()
 
@@ -193,10 +206,10 @@ class Parser:
             if self.debug:
                 logger.debug("match {} -> {}".format(self.current_token, token_cls.__name__))
             if token_cls is Id:
-                self.current_symbol.scope = IdScope.Local
+                self.current_symbol.level = IdLevel(self.current_level)
                 self.current_symbol.name = self.current_token.value
                 self.current_symbol.token_cls = Id
-                self.symbols[self.current_symbol.name] = self.current_symbol
+                self.symbols[f"{self.current_symbol.name}@{self.current_level}"] = self.current_symbol
                 self.current_symbol = Symbol()
             self.current_token = self.next_token()
         else:
