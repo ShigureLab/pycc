@@ -29,7 +29,7 @@ def main():
     print(token_stream)
     # 语法分析
     parser = Parser(source_code, debug=True)
-    print(parser.stmts())
+    print(parser.start())
     for key in parser.symbols:
         print(parser.symbols[key])
 

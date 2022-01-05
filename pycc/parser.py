@@ -1,3 +1,4 @@
+from types import LambdaType
 from typing import Optional, Type
 
 from pycc.lexer import (
@@ -52,23 +53,10 @@ class Parser:
     def __del__(self):
         self.symbols.leave_scope()
 
-    def assign_expr(self):
-        if self.debug:
-            logger.debug("assign_expr:", self.current_token)
-        if isinstance(self.current_token, Id):
-            symbol_name = self.current_token.value
-            self.match(Id)
-            self.match(Assign)
-            value = self.assign_expr()
-            self.symbols.get_symbol(symbol_name).value = value
-        else:
-            value = self.sum_expr()
-        return value
-
     def expr(self) -> int:
         if self.debug:
             logger.debug("expr:", self.current_token)
-        value = self.assign_expr()
+        value = self.sum_expr()
         if (tail_value := self.expr_tail()) is not None:
             value = tail_value
         return value
@@ -80,7 +68,7 @@ class Parser:
         value = None
         if isinstance(self.current_token, Comma):
             self.match(Comma)
-            value = self.assign_expr()
+            value = self.sum_expr()
             if (tail_value := self.expr_tail()) is not None:
                 value = tail_value
         return value
@@ -201,8 +189,10 @@ class Parser:
     def stmt(self):
         if self.debug:
             logger.debug("stmt:", self.current_token)
-        if isinstance(self.current_token, (Id, Num, Chr, Lparbrak)):
-            print(self.expr())
+        if isinstance(self.current_token, Id):
+            self.match(Id)
+            self.match(Assign)
+            self.expr()
             self.match(Semi)
         elif isinstance(self.current_token, (Int, Float, Char, Void)):
             self.declare()
@@ -242,6 +232,7 @@ class Parser:
         if isinstance(self.current_token, (Id, Num, Chr, Lparbrak, Int, Float, Char, Void, Return, If, While)):
             self.stmt()
             self.stmts()
+        # elif isinstance(self.current_token, (Id, Num, Chr, Lparbrak, Int, Float, Char, Void, Return, If, While)):
 
     def match(self, token_cls: Type[Token]):
         if isinstance(self.current_token, token_cls):
@@ -256,3 +247,62 @@ class Parser:
             return self.lexer.__next__()
         except StopIteration:
             return None
+
+    def return_type(self):
+        if self.debug:
+            logger.debug("return_type:", self.current_token)
+        if isinstance(self.current_token, Int):
+            self.match(Int)
+        elif isinstance(self.current_token, Float):
+            self.match(Float)
+            # self.base_type = IdType.Float
+        elif isinstance(self.current_token, Char):
+            self.match(Char)
+            # self.base_type = IdType.Char
+        elif isinstance(self.current_token, Void):
+            self.match(Void)
+
+    def start(self):
+        if self.debug:
+            logger.debug("start:",self.current_token)
+        if isinstance(self.current_token, (Int, Float, Char, Void)):
+            self.start_tail()
+            self.start()
+    
+    def start_tail(self):
+        if self.debug:
+            logger.debug("start_tail:",self.current_token)
+        self.type()
+        self.match(Id)
+        if isinstance(self.current_token, Lparbrak):
+            self.match(Lparbrak)
+            self.func_params()
+            self.match(Rparbrak)
+            if isinstance(self.current_token, Lcurbrak):
+                self.match(Lcurbrak)
+                self.stmts()
+                self.match(Rcurbrak)
+            elif isinstance(self.current_token, Semi):
+                self.match(Semi)
+        else:
+            self.declare_tail()
+            self.match(Semi)
+
+    def func_params(self):
+        if self.debug:
+            logger.debug("func_params:", self.current_token)
+        if isinstance(self.current_token, (Int, Float, Char, Void)):
+            self.type()
+            self.match(Id)
+            self.func_params_tail()
+    
+    def func_params_tail(self):
+        if self.debug:
+            logger.debug("func_params_tail:", self.current_token)
+        if isinstance(self.current_token, Comma):
+            self.match(Comma)
+            self.type()
+            self.match(Id)
+            self.func_params_tail()
+
+    
