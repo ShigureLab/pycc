@@ -31,7 +31,8 @@ class Token:
 
 class Num(Token):
     value: int
-    regexp = re.compile(r"\d+")
+    regexp = re.compile(r"(?P<match>0|[1-9][0-9]*)[^a-zA-Z]")
+    result_group = "match"
     has_value = True
 
     def __init__(self, string: str):
