@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from pycc.utils import logger
 
@@ -10,6 +10,7 @@ class Token:
     value: Any = None
     regexp = re.compile(r"")
     has_value = False
+    result_group: Union[str, int] = 0
 
     def __init__(self, string: str = ""):
         self.value = None
@@ -21,6 +22,11 @@ class Token:
     @classmethod
     def token_classes(cls):
         return cls.__subclasses__()
+
+    def __repr__(self):
+        if self.has_value:
+            return f"<{self.__class__.__name__}, {self.value}>"
+        return f"<{self.__class__.__name__}>"
 
 
 class Num(Token):
@@ -39,58 +45,67 @@ class Chr(Token):
     has_value = True
 
     def __init__(self, string: str):
-        self.value = string
+        self.value = string[1:-1]
 
 
-# class Enum(Token):
+class Enum(Token):
+    value: None
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>enum)([^a-zA-Z0-9_]|$)")
+
+
 class If(Token):
-    value: str
-    regexp = re.compile(r"if[^a-zA-Z0-9_]")
+    value: None
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>if)([^a-zA-Z0-9_]|$)")
 
 
 class Else(Token):
-    value: str
-    regexp = re.compile(r"else[^a-zA-Z0-9_]")
+    value: None
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>else)([^a-zA-Z0-9_]|$)")
 
 
 class While(Token):
-    value: str
-    regexp = re.compile(r"while[^a-zA-Z0-9_]")
+    value: None
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>while)([^a-zA-Z0-9_]|$)")
 
 
 class Int(Token):
     value: None
-    regexp = re.compile(r"int[^a-zA-Z0-9_]")
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>int)([^a-zA-Z0-9_]|$)")
 
 
 class Char(Token):
     value: None
-    regexp = re.compile(r"char[^a-zA-Z0-9_]")
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>char)([^a-zA-Z0-9_]|$)")
 
 
 class Void(Token):
     value: None
-    regexp = re.compile(r"void[^a-zA-Z0-9_]")
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>void)([^a-zA-Z0-9_]|$)")
 
 
 class Float(Token):
     value: None
-    regexp = re.compile(r"float[^a-zA-Z0-9_]")
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>float)([^a-zA-Z0-9_]|$)")
 
 
 class Return(Token):
     value: None
-    regexp = re.compile(r"return[^a-zA-Z0-9_]")
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>return)([^a-zA-Z0-9_]|$)")
 
 
 class Sizeof(Token):
     value: None
-    regexp = re.compile(r"sizeof[^a-zA-Z0-9_]")
-
-
-class Assign(Token):
-    value: None
-    regexp = re.compile(r"=")
+    result_group = "match"
+    regexp = re.compile(r"(?P<match>sizeof)([^a-zA-Z0-9_]|$)")
 
 
 class Tilde(Token):
@@ -103,8 +118,16 @@ class Comma(Token):
     regexp = re.compile(r",")
 
 
-# class Lsqubrak(Token): # [
-# class Rsqubrak(Token): # ]
+class Lsqubrak(Token):  # [
+    value: None
+    regexp = re.compile(r"\[")
+
+
+class Rsqubrak(Token):  # ]
+    value: None
+    regexp = re.compile(r"\]")
+
+
 class Lparbrak(Token):  # (
     value: None
     regexp = re.compile(r"\(")
@@ -125,20 +148,77 @@ class Rcurbrak(Token):  # }
     regexp = re.compile(r"\}")
 
 
-# class Cond(Token):
-# class Lor(Token):
-# class Lan(Token):
-# class Or(Token):
-# class Xor(Token):
-# class And(Token):
-# class Eq(Token):
-# class Ne(Token):
-# class Lt(Token):
-# class Gt(Token):
-# class Le(Token):
-# class Ge(Token):
-# class Shl(Token):
-# class Shr(Token):
+class Lor(Token):
+    value: None
+    regexp = re.compile(r"\|\|")
+
+
+class Lan(Token):
+    value: None
+    regexp = re.compile(r"\&\&")
+
+
+class Or(Token):
+    value: None
+    regexp = re.compile(r"\|")
+
+
+class Xor(Token):
+    value: None
+    regexp = re.compile(r"\^")
+
+
+class And(Token):
+    value: None
+    regexp = re.compile(r"\&")
+
+
+class Eq(Token):
+    value: None
+    regexp = re.compile(r"==")
+
+
+class Ne(Token):
+    value: None
+    regexp = re.compile(r"\!=")
+
+
+class Le(Token):
+
+    value: None
+    regexp = re.compile(r"<=")
+
+
+class Ge(Token):
+    value: None
+    regexp = re.compile(r">=")
+
+
+class Lt(Token):
+    value: None
+    regexp = re.compile(r"<")
+
+
+class Gt(Token):
+    value: None
+    regexp = re.compile(r">")
+
+
+class Shl(Token):
+    value: None
+    regexp = re.compile(r"<<")
+
+
+class Shr(Token):
+    value: None
+    regexp = re.compile(r">>")
+
+
+class Assign(Token):
+    value: None
+    regexp = re.compile(r"=")
+
+
 class Add(Token):
     value: None
     regexp = re.compile(r"\+")
@@ -223,7 +303,7 @@ class Lexer:
             # 匹配各种 token
             for token_cls in Token.token_classes():
                 if match_obj := token_cls.match(self.source_code, self.source_pointer):
-                    match_str = match_obj.group(0)
+                    match_str = match_obj.group(token_cls.result_group)
                     self.source_pointer += len(match_str)
                     if token_cls.has_value:
                         return token_cls(match_str)

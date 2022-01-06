@@ -1,19 +1,85 @@
 # 表达式
-# expr ->
-#     | expr <Comma> assign_expr
-#     | assign_expr
+expr -> relation_expr
 
-expr -> assign_expr expr_tail
-expr_tail ->
-    | <Comma> assign_expr expr_tail
+# 逻辑或表达式
+# lor_expr ->
+#     | lor_expr <And> land_expr
+#     | land_expr
+
+lor_expr -> land_expr lor_expr_tail
+lor_expr_tail ->
+    | <Lor> land_expr lor_expr_tail
     | <empty>
 
-# 赋值表达式
-assign_expr ->
-    | <Id> <Assign> assign_expr
-    | sum_expr
+# 逻辑与表达式
+# land_expr ->
+#     | land_expr <And> or_expr
+#     | or_expr
 
-# 加减号
+land_expr -> or_expr land_expr_tail
+land_expr_tail ->
+    | <Lan> or_expr land_expr_tail
+    | <empty>
+
+# 按位或表达式
+# or_expr ->
+#     | or_expr <And> xor_expr
+#     | xor_expr
+
+or_expr -> xor_expr or_expr_tail
+or_expr_tail ->
+    | <Or> xor_expr or_expr_tail
+    | <empty>
+
+# 按位异或表达式
+# xor_expr ->
+#     | xor_expr <And> and_expr
+#     | and_expr
+
+xor_expr -> and_expr xor_expr_tail
+xor_expr_tail ->
+    | <Xor> and_expr xor_expr_tail
+    | <empty>
+
+# 按位与表达式
+# and_expr ->
+#     | and_expr <And> equal_expr
+#     | equal_expr
+
+and_expr -> equal_expr and_expr_tail
+and_expr_tail ->
+    | <And> equal_expr and_expr_tail
+    | <empty>
+
+# 关系（是否等于）表达式
+# equal_expr ->
+#     | equal_expr <Eq> compare_expr
+#     | equal_expr <Ne> compare_expr
+#     | compare_expr
+
+equal_expr -> compare_expr equal_expr_tail
+equal_expr_tail ->
+    | <Eq> compare_expr equal_expr_tail
+    | <Ne> compare_expr equal_expr_tail
+    | <empty>
+
+# 关系（比较大小）表达式
+# compare_expr ->
+#     | compare_expr <Lt> sum_expr
+#     | compare_expr <Gt> sum_expr
+#     | compare_expr <Le> sum_expr
+#     | compare_expr <Ge> sum_expr
+#     | sum_expr
+
+compare_expr -> sum_expr compare_expr_tail
+compare_expr_tail ->
+    | <Lt> sum_expr compare_expr_tail
+    | <Gt> sum_expr compare_expr_tail
+    | <Le> sum_expr compare_expr_tail
+    | <Ge> sum_expr compare_expr_tail
+    | <empty>
+
+# 加法表达式
 # sum_expr ->
 #     | sum_expr <Add> term
 #     | sum_expr <Sub> term
@@ -25,7 +91,7 @@ sum_expr_tail ->
     | <Sub> term sum_expr_tail
     | <empty>
 
-# 乘除号
+# 乘法表达式
 # term ->
 #     | term <Mul> factor
 #     | term <Div> factor
@@ -50,17 +116,10 @@ type ->
     | <Void>
 
 # 变量声明
-# declare ->
-#     | type <Id> <Assign> expr
-#     | type <Id>
-
-declare -> type <Id> declare_tail
-declare_tail ->
-      | <Assign> expr
-      | <empty>
+declare -> type <Id>
 
 # stmt ->
-#     | expr <Semi>
+#     | <Id> <Assign> expr <Semi>
 #     | declare <Semi>
 #     | <Return> expr <Semi>
 #     | <If> <Lparbrak> expr <Rparbrak> stmt <Else> stmt
@@ -69,7 +128,7 @@ declare_tail ->
 #     | <Lcurbrak> stmts <Rparbrak>
 
 stmt ->
-    | expr <Semi>
+    | <Id> <Assign> expr <Semi>
     | declare <Semi>
     | <Return> expr <Semi>
     | <If> <Lparbrak> expr <Rparbrak> else_branch
@@ -84,13 +143,12 @@ stmts ->
     | stmt stmts
     | <empty>
 
-S ->
-    | S_tail S
+start ->
+    | start_tail start
     | <empty>
 
-S_tail ->
+start_tail ->
     | declare <Semi>
-    | func_declare <Semi>
     | func_declare <Lcurbrak> stmts <Rcurbrak>
 
 func_declare -> type <Id> <Lparbrak> func_params <Rparbrak>
@@ -101,3 +159,4 @@ func_params ->
 func_params_tail ->
     | <Comma> type <Id> func_params_tail
     | <empty>
+

@@ -120,3 +120,6 @@ setup.py
 target/test_vm
 target/*.o
 cpp/vm.cpp
+
+# ast
+ast.json

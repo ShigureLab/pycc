@@ -33,7 +33,7 @@ enum {
   LEV,  LI,   LC,   SI,   SC,   PUSH, OR,   XOR,
   AND,  EQ,   NE,   LT,   GT,   LE,   GE,   SHL,
   SHR,  ADD,  SUB,  MUL,  DIV,  MOD,  OPEN, READ,
-  CLOS, PRTF, MALC, FREE, MSET, MCMP, EXIT,
+  CLOS, PRTF, MALC, FREE, MSET, MCMP, EXIT, PLAC,
 };
 // clang-format on
 
@@ -75,6 +75,15 @@ class VirtualMachineCpp {
   int64 run(bool debug);
   int64 run_all_ops(bool debug);
   int pc_offset();
+  int64 get_op_pointer(int offset);
+  void set_pc(int64 pc);
+  void show_ops();
+  void setup_main(int64 main_ptr, int argc = 0, char **argv = nullptr);
 };
 
 }  // namespace vm
+
+namespace common {
+using int64 = long long int;
+void _send_integer_to_pointer(vm::int64 ptr, vm::int64 value);
+}  // namespace common

@@ -6,6 +6,7 @@ cimport libvm
 from libvm cimport VirtualMachineCpp
 from libvm cimport int64
 from libvm cimport VMStatusCpp
+from libvm cimport _send_integer_to_pointer
 
 from enum import Enum
 from typing import Union
@@ -50,6 +51,7 @@ class Instruction(Enum):
     MSET = libvm.MSET
     MCMP = libvm.MCMP
     EXIT = libvm.EXIT
+    PLAC = libvm.PLAC
 
 class VMStatus(Enum):
     INIT = libvm.VM_INIT
@@ -98,6 +100,19 @@ cdef class VirtualMachine:
     def pc_offset(self) -> int:
         return self.vmcpp.pc_offset()
 
+    def get_op_pointer(self, offset: int = 0) -> int:
+        return self.vmcpp.get_op_pointer(offset)
+
+    def set_pc(self, pc: int) -> None:
+        self.vmcpp.set_pc(pc)
+
+    def show_ops(self) -> None:
+        self.vmcpp.show_ops()
+
+    def setup_main(self, main_ptr: int, argc: int = 0, argv: list[str] = 0)-> None :
+        # TODO: argc, argv
+        self.vmcpp.setup_main(main_ptr)
+
     @property
     def poolsize(self) -> int:
         return self.vmcpp.poolsize
@@ -139,3 +154,6 @@ cdef int _c_pointer_to_interger(int64 i_ptr):
 
 def c_pointer_to_integer(i_ptr: int) -> int:
     return _c_pointer_to_interger(i_ptr)
+
+def send_integer_to_pointer(ptr: int, value: int) -> None:
+    _send_integer_to_pointer(ptr, value)

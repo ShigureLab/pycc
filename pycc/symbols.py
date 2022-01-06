@@ -1,11 +1,9 @@
 from enum import Enum
 from dataclasses import dataclass
-from pycc.lexer import Token
 from typing import Type, Any, Optional
 
 
 class IdType(Enum):
-
     Void = 0
     Int = 1
     Float = 2
@@ -15,16 +13,28 @@ class IdType(Enum):
     # TODO: ptr to type
 
 
+class IdClass(Enum):
+    Sys = 0
+    Func = 1
+    Var = 2
+
+
 class IdLevel(Enum):
     BuildIn = 0
     Global = 1
     Local = 2
 
+    def __add__(self, level: int) -> "IdLevel":
+        return self.__class__(self.value + level)
+
+    def __sub__(self, level: int) -> "IdLevel":
+        return self.__class__(self.value - level)
+
 
 @dataclass
 class Symbol:
     name: str = ""
-    token_cls: Optional[Type[Token]] = None
+    cls: Optional[IdClass] = None
     data_type: Optional[IdType] = None
     level: Optional[IdLevel] = None
     value: Any = None
@@ -58,7 +68,7 @@ class SymbolTable(dict[str, Symbol]):
         for scope_id in reversed(self.scope_stack + [self.scope_id]):
             if (symbol := self.get(self.calc_key(name, scope_id))) is not None:
                 return symbol
-        raise Exception(f"name {name} not defined")
+        raise Exception(f"name {name} is not defined")
 
     @staticmethod
     def calc_key(name: str, level: int) -> str:

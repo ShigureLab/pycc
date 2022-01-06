@@ -37,7 +37,7 @@ const std::string instruction_name[] = {
     "LEV",  "LI",   "LC",   "SI",   "SC",   "PUSH", "OR",   "XOR",
     "AND",  "EQ",   "NE",   "LT",   "GT",   "LE",   "GE",   "SHL",
     "SHR",  "ADD",  "SUB",  "MUL",  "DIV",  "MOD",  "OPEN", "READ",
-    "CLOS", "PRTF", "MALC", "FREE", "MSET", "MCMP", "EXIT",
+    "CLOS", "PRTF", "MALC", "FREE", "MSET", "MCMP", "EXIT", "PLAC",
 };
 
 VirtualMachineCpp::VirtualMachineCpp() {
@@ -197,17 +197,12 @@ VMStatusCpp VirtualMachineCpp::step(bool debug = false) {
 
 int64 VirtualMachineCpp::run(bool debug = false) {
   while (true) {
-    int oplen = *(this->pc) <= ADJ ? 2 : 1;
-    if (this->pc_offset() + oplen <= this->op_counter_) {
-      VMStatusCpp status = this->step(debug);
-      if (status == VMStatusCpp::EXIT) {
-        return this->result_;
-      }
-    } else {
-      std::cout << logger::WARNING_BADGE << " pc out of op_counter"
-                << std::endl;
+    VMStatusCpp status = this->step(debug);
+    if (status == VMStatusCpp::EXIT) {
+      return this->result_;
     }
   }
+  return 0;
 }
 
 int64 VirtualMachineCpp::run_all_ops(bool debug = false) {
@@ -228,4 +223,45 @@ int64 VirtualMachineCpp::run_all_ops(bool debug = false) {
 int VirtualMachineCpp::pc_offset() {
   return pc - text;
 }
+
+int64 VirtualMachineCpp::get_op_pointer(int offset) {
+  return (int64)(this->text + this->op_counter_ + offset);
+}
+void VirtualMachineCpp::set_pc(int64 pc) {
+  this->pc = (int64 *)pc;
+}
+
+void VirtualMachineCpp::show_ops() {
+  AddressRegister op_pointer = text;
+  Register op;
+  int cycle = 0;
+  while (op_pointer < (text + this->op_counter_)) {
+    op = *op_pointer;
+    std::cout << logger::INFO_BADGE << " " << cycle << "> " << std::left
+              << std::setw(4) << instruction_name[op];
+    if (op <= ADJ) {  // 含操作数指令，额外打印操作数
+      std::cout << " " << *++op_pointer;
+    }
+    std::cout << std::endl;
+    op_pointer++;
+    cycle++;
+  }
+}
+
+void VirtualMachineCpp::setup_main(int64 main_ptr, int argc, char **argv) {
+  AddressRegister tmp;
+  pc = (int64 *)main_ptr;
+  *--sp = EXIT;
+  *--sp = PUSH;
+  tmp = sp;
+  *--sp = argc;
+  *--sp = (int64)argv;
+  *--sp = (int64)tmp;
+}
+
 }  // namespace vm
+namespace common {
+void _send_integer_to_pointer(vm::int64 ptr, vm::int64 value) {
+  *(vm::int64 *)ptr = value;
+}
+}  // namespace common

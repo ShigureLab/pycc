@@ -1,8 +1,7 @@
 import argparse
+import sys
 
-# from pycc.vm import VirtualMachine, Instruction, c_pointer_to_string, c_pointer_to_integer
-from pycc.lexer import Token, match_comments, match_whitespace, Lexer
-from pycc.lexer import Int
+from pycc.lexer import Lexer, Token
 from pycc.parser import Parser
 from pycc.utils import logger
 
@@ -26,13 +25,27 @@ def main():
     # for token in lexer:
     #     token_stream.append(token)
     token_stream = lexer.tokenize()
+    print("词法分析结果：")
     print(token_stream)
     # 语法分析
+
+    print("语法分析中……")
     parser = Parser(source_code, debug=True)
-    print(parser.stmts())
+    ast = parser.start()
+    ast.dump("ast.json")
+
+    print("符号表：")
     for key in parser.symbols:
-        print(parser.symbols[key])
+        print(key, ": ", parser.symbols[key])
+
+    print("全部指令：")
+    main_ptr = parser.symbols.get_symbol("main").value
+    parser.vm.show_ops()
+    parser.vm.setup_main(main_ptr)
+    print("虚拟机运行中……")
+    result = parser.vm.run(True)
+    return result
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

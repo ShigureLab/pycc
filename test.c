@@ -1,19 +1,25 @@
-// // 单行注释 1
-// int a = 0;  // 单行注释 2
-// /**
-//  * 这是一段多行注释
-//  **/
-// int b = 11;
-// b = b + a * b;
-// return b;
-// // sss
-12 / (2 - 16) + 1 * (9, 0);
-1 * 2;
-9 + 2 / 5;
-int a = 1;
-int b = 2 * 8;
-if (1) {
-  b = 1;
-} else {
+int main() {
+  int a;
+  int i;
+
+  i = 0;
   a = 0;
+  while (i < 10) {
+    a = a + i;
+    i = i + 1;
+  }
+  return a;
 }
+
+// int fibonacci(int i) {
+//   if (i <= 1) {
+//     return 1;
+//   }
+//   return fibonacci(i - 1) + fibonacci(i - 2);
+// }
+
+// int main() {
+//   int i;
+//   i = 0;
+//   return fibonacci(10);
+// }
