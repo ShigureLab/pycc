@@ -88,6 +88,12 @@ make run # 运行 C++ 部分测试代码
 ├── pycc                            # Python 端代码
 │   ├── __init__.py
 │   ├── __main__.py                 # Python 入口文件
+│   ├── lexer.py                    # 词法分析器
+│   ├── parser.py                   # 语法分析器（递归下降）
+│   ├── symbols.py                  # 符号表
+│   ├── utils
+│   │   ├── __init__.py
+│   │   └── logger.py               # 用于打印 log
 │   ├── vm.cpython-310-darwin.so    # vm 动态链接库，不同系统/Python 类型/Python 版本生成文件名会不同
 │   └── vm.pyi                      # vm Python 定义文件（非必需，为 Editor 提供代码提示）
 ├── pyproject.toml
@@ -115,10 +121,24 @@ make run # 运行 C++ 部分测试代码
    -  [ ] 显示所有寄存器的方法
    -  [ ] 显示局部内存的方法
 -  [ ] Lexer
+   -  [x] 整型数支持
+   -  [ ] 非整型数支持
 -  [ ] Parser
--  [ ] docs
+   -  [x] 全局运算支持
+   -  [x] 局部运算支持
+   -  [ ] 非整形运算支持
+-  [x] Symbols
+   -  [x] 全局变量
+   -  [x] 局部变量
+   -  [ ] 内置函数（系统调用）
+-  [x] docs
    -  [x] 文件结构说明
 -  [x] CI
+-  [ ] tests
+   -  [x] VM
+   -  [ ] Lexer
+   -  [ ] Parser
+   -  [x] Symbols
 
 ## References
 
