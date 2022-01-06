@@ -240,9 +240,21 @@ class Div(Token):
     regexp = re.compile(r"/")
 
 
-# class Mod(Token):
-# class Inc(Token):
-# class Dec(Token):
+class Mod(Token):
+    value: None
+    regexp = re.compile(r"%")
+
+
+class Inc(Token):
+    value: None
+    regexp = re.compile(r"\+\+")
+
+
+class Dec(Token):
+    value: None
+    regexp = re.compile(r"\-\-")
+
+
 class Semi(Token):
     value: None
     regexp = re.compile(r";")

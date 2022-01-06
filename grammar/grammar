@@ -1,5 +1,5 @@
 # 表达式
-expr -> relation_expr
+expr -> lor_expr
 
 # 逻辑或表达式
 # lor_expr ->
