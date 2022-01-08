@@ -95,12 +95,14 @@ sum_expr_tail ->
 # term ->
 #     | term <Mul> factor
 #     | term <Div> factor
+#     | term <Mod> factor
 #     | factor
 
 term -> factor term_tail
 term_tail ->
     | <Mul> factor term_tail
     | <Div> factor term_tail
+    | <Mod> factor term_tail
     | <empty>
 
 factor ->

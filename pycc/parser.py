@@ -17,6 +17,7 @@ from pycc.lexer import (
     Lexer,
     Lparbrak,
     Mul,
+    Mod,
     Num,
     Rcurbrak,
     Return,
@@ -345,6 +346,12 @@ class Parser:
             self.vm.add_op(Instruction.PUSH)
             node.add_node(self.factor())
             self.vm.add_op(Instruction.DIV)
+            node.add_node(self.term_tail())
+        elif isinstance(self.current_token, Mod):
+            node.add_node(self.match(Mod))
+            self.vm.add_op(Instruction.PUSH)
+            node.add_node(self.factor())
+            self.vm.add_op(Instruction.MOD)
             node.add_node(self.term_tail())
         return node
 
