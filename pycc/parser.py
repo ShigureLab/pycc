@@ -91,7 +91,7 @@ class Parser:
         self.symbols = SymbolTable()
         self.current_symbol = Symbol()
         self.base_type = IdType.Int
-        self.preset_buildins()
+        self.preset_builtins()
         self.symbols.enter_scope()
         self.debug = debug
         self.vm = VirtualMachine(256 * 1024)
@@ -102,7 +102,7 @@ class Parser:
     def __del__(self):
         self.symbols.leave_scope()
 
-    def preset_buildins(self):
+    def preset_builtins(self):
         system_calls = ["open", "read", "close", "printf", "malloc", "free", "memset", "memcmp"]
 
         for i in range(Instruction.EXIT.value - Instruction.OPEN.value):

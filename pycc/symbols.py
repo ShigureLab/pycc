@@ -20,7 +20,7 @@ class IdClass(Enum):
 
 
 class IdLevel(Enum):
-    BuildIn = 0
+    BuiltIn = 0
     Global = 1
     Local = 2
 
