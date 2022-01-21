@@ -1,4 +1,4 @@
-# pycc <sup>[Experimental - WIP]</sup>
+# pycc <sup>[Experimental - Deprecated]</sup>
 
 <p align="center">
    <a href="https://github.com/ShigureLab"><img src="https://img.shields.io/badge/ShigureLab-cyan?style=flat-square" alt="ShigureLab"></a>
