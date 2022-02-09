@@ -5,7 +5,12 @@
   pin: false,
   commitMessagePrefix: "⬆️ deps: ",
   dependencyDashboardTitle: "☑️ Dependency Dashboard",
-  automerge: true,
-  automergeType: "pr",
-  automergeStrategy: "squash",
+  packageRules: [
+    {
+      matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+      automerge: true,
+      automergeType: "pr",
+      automergeStrategy: "squash"
+    }
+  ]
 }
