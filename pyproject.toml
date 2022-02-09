@@ -10,7 +10,7 @@ python = "^3.9"
 ansimarkup = "^1.5.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2"
+pytest = "^7.0"
 black = "^21.11b1"
 Cython = "^0.29.25"
 
